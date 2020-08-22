@@ -16,12 +16,13 @@ func MySQL() *gorm.DB {
 		godotenv.Load(".env")
 	}
 
-	host := os.Getenv("HOST")
-	username := os.Getenv("USERNAME")
-	password := os.Getenv("PASSWORD")
-	database := os.Getenv("DATABASE")
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	username := os.Getenv("DB_USERNAME")
+	password := os.Getenv("DB_PASSWORD")
+	database := os.Getenv("DB_NAME")
 
-	db, err := gorm.Open("mysql", username+":"+password+"@("+host+")/"+database+"?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", username+":"+password+"@("+host+":"+port+")/"+database+"?charset=utf8&parseTime=True&loc=Local")
 
 	db.DB().SetConnMaxLifetime(time.Minute * 10)
 	db.DB().SetMaxIdleConns(0)
