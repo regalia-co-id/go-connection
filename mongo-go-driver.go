@@ -17,13 +17,14 @@ func MongoClient() *mongo.Client {
 	}
 
 	host := os.Getenv("DB_HOST")
-	port := os.Getenv("DB_PORT")
+	// port := os.Getenv("DB_PORT")
 	username := os.Getenv("DB_USERNAME")
 	password := os.Getenv("DB_PASSWORD")
 
 	var client *mongo.Client
 	// Set client options
-	clientOptions := options.Client().ApplyURI("mongodb+srv://" + username + ":" + password + "@" + host + ":" + port + "")
+	// clientOptions := options.Client().ApplyURI("mongodb://" + username + ":" + password + "@" + host + ":" + port + "")
+	clientOptions := options.Client().ApplyURI("mongodb+srv://" + username + ":" + password + "@" + host)
 
 	// Client to MongoDB
 	client, err = mongo.Connect(context.Background(), clientOptions)
