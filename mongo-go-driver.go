@@ -21,28 +21,24 @@ func MongoClient(srv int) *mongo.Client {
 	username := os.Getenv("DB_USERNAME")
 	password := os.Getenv("DB_PASSWORD")
 
-	var client *mongo.Client
-
-	credential := options.Credential{
-		Username: username,
-		Password: password,
-	}
 	// Set client options
-	clientOptions := options.Client().ApplyURI("mongodb://" + host + ":" + port).SetAuth(credential)
+	clientOptions := options.Client().ApplyURI("mongodb://" + username + ":" + password + "@" + host + ":" + port + "")
 	if srv == 1 {
 		clientOptions = options.Client().ApplyURI("mongodb+srv://" + username + ":" + password + "@" + host)
 	}
 
-	// Client to MongoDB
-	client, err = mongo.Connect(context.Background(), clientOptions)
-
+	client, err := mongo.NewClient(clientOptions)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Client to MongoDB
+	err = client.Connect(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Check the connection
 	err = client.Ping(context.Background(), nil)
-
 	if err != nil {
 		log.Fatal(err)
 	}
