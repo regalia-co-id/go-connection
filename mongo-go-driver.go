@@ -22,8 +22,13 @@ func MongoClient(srv int) *mongo.Client {
 	password := os.Getenv("DB_PASSWORD")
 
 	var client *mongo.Client
+
+	credential := options.Credential{
+		Username: username,
+		Password: password,
+	}
 	// Set client options
-	clientOptions := options.Client().ApplyURI("mongodb://" + username + ":" + password + "@" + host + ":" + port + "")
+	clientOptions := options.Client().ApplyURI("mongodb://" + host + ":" + port).SetAuth(credential)
 	if srv == 1 {
 		clientOptions = options.Client().ApplyURI("mongodb+srv://" + username + ":" + password + "@" + host)
 	}
